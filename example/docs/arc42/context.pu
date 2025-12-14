@@ -1,0 +1,40 @@
+@startuml context
+skinparam style strictuml
+skinparam rectangle {
+  BackgroundColor #F9F9F9
+  BorderColor Black
+}
+
+title BrokerX - Diagramme de contexte
+
+actor "Client" as client
+note left
+Un utilisateur de BrokerX qui possède un compte.
+end note
+
+rectangle "BrokerX" as brokerx {
+    rectangle "Opérations Back-Office"
+    note bottom
+    S'occupe de l'appariement des ordres et de leur exécution
+    et met à jour les portfolios.
+    end note
+
+    rectangle "Conformité/Risque"
+    note bottom
+    Effectue les vérifications pré et post trade.
+    end note
+}
+note left of brokerx
+Permet aux clients d'approvisionner leur portefeuille
+et de placer des ordres.
+end note
+
+rectangle "Fournisseur de données de marché" as fournisseur
+note left
+Fournit les cotations des instruments en temps réel.
+end note
+
+client --> brokerx : "Gérer son portfolio,\nconsulter les cotations en temps réel et\nplacer des ordres"
+brokerx --> fournisseur : "Obtient les cotations en temps réel"
+
+@enduml

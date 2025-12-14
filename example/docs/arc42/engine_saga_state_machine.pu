@@ -1,0 +1,35 @@
+@startuml engine_saga_state_machine
+1 : PLACING_ORDER
+2 : FINDING_BEST_MATCH
+3 : VALIDATING_ORDER
+4 : CREATING_TRANSACTION
+5 : UPDATING_BALANCE
+6 : UPDATING_POSITION
+7 : COMPLETING_ORDER_SAGA
+10 : DELETING_TRANSACTION
+11 : REVERTING_BALANCE
+
+[*] --> 1
+
+1 --> 2 : OrderPlaced
+2 --> 3 : MatchFound
+3 --> 4 : OrderValidated
+4 --> 5 : TransactionCreated
+5 --> 6 : BalanceUpdated
+6 --> 7 : PositionUpdated
+
+1 --> 7 : OrderPlacementFailed
+2 --> 7 : NoMatchFound
+3 --> 7 : OrderValidationFailed
+
+4 --> 7 : TransactionCreationFailed
+5 --> 10 : BalanceUpdateFailed
+6 --> 11 : PositionUpdateFailed
+
+7 --> 2 : OrderPartiallyFilled
+
+11 --> 10 : BalanceReverted
+10 --> 7 : TransactionReverted
+
+7 --> [*] : SagaCompleted
+@enduml

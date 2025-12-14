@@ -5,7 +5,7 @@ inputs:
   docs-path:
     default: docs/
   output-path:
-    default: docs/
+    default: docs/report.md
 
 runs:
   using: composite

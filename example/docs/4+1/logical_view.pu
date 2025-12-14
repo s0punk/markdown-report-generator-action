@@ -1,0 +1,168 @@
+@startuml logical_view
+hide empty members
+
+title BrokerX - Vue logique
+
+class User {
+    String id
+    String firstName
+    String lastName
+    String email
+    
+    DateTime birthday
+    String phoneNumber
+    String address
+
+    AccountState state
+}
+
+enum AccountState {
+    Pending
+    Active
+    Rejected
+    Suspended
+}
+
+class Portfolio {
+    String id
+    Decimal balance
+
+    List<Position> positions
+    List<Transaction> transactionHistory
+}
+
+class Position {
+    String id
+
+    String ticker
+    Decimal quantity
+}
+
+abstract class Transaction {
+    String id
+    DateTime timestamp
+
+    Decimal fees
+    Decimal total
+
+    TransactionState state
+}
+
+enum TransactionState {
+    Pending
+    Settled
+    Failed
+}
+
+abstract class TradeTransaction {
+    String ticker
+    String orderId
+
+    Decimal unitPrice
+    Decimal quantity
+}
+class Settlement {}
+class BuyTransaction {}
+class SellTransaction {}
+
+abstract class FundTransaction {}
+class Withdrawal {}
+class Deposit {}
+
+class Instrument {
+    String ticker
+    String name
+}
+
+class Quote {
+    String id
+    String ticker
+
+    Decimal open
+    Decimal high
+    Decimal low
+    Decimal close
+
+    DateTime timestamp
+}
+
+User ..> AccountState
+User *-- Portfolio
+
+Portfolio *-- Position
+Portfolio *-- Transaction
+
+Position *-- Instrument
+Quote o-- Instrument
+
+Transaction ..> TransactionState
+Transaction <|-- TradeTransaction
+Transaction <|-- FundTransaction
+FundTransaction <|-- Withdrawal
+FundTransaction <|-- Deposit
+
+TradeTransaction o-- Instrument
+TradeTransaction <|-- Settlement
+TradeTransaction <|-- BuyTransaction
+TradeTransaction <|-- SellTransaction
+
+enum Sens {
+    Buy
+    Sell
+}
+
+abstract class Order {
+    String id
+    String userId
+
+    Sens sens
+    String ticker
+    Decimal quantity
+    OrderDuration duration
+
+    DateTime timestamp
+
+    OrderState state
+}
+
+enum OrderState {
+    Pending
+    Working
+    Rejected
+    Cancelled
+    Filled
+    PartiallyFilled
+    Expired
+}
+
+class LimitOrder {
+    Decimal unitPrice
+}
+
+class MarketOrder {}
+
+abstract class OrderDuration {
+    bool checkExpiration()
+}
+
+class DAYOrder {}
+class GTCOrder {}
+class IOCOrder {}
+class FOKOrder {}
+class GTDOrder {}
+
+Order ..> Sens
+Order ..> OrderState
+Order o-- Instrument
+
+Order <|-- LimitOrder
+Order <|-- MarketOrder
+Order *-- OrderDuration
+
+OrderDuration <|-- DAYOrder
+OrderDuration <|-- GTCOrder
+OrderDuration <|-- IOCOrder
+OrderDuration <|-- FOKOrder
+OrderDuration <|-- GTDOrder
+
+@enduml

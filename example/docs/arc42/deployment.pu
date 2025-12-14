@@ -1,0 +1,89 @@
+@startuml deployment
+skinparam style strictuml
+
+actor client as cl1
+actor client as cl2
+actor client as cl3
+
+node "Machine Virtuelle" {
+    node "Proxy" as lb {
+        component "NGINX" as balancer
+    }
+
+    node "API Gateway / Load Balancer" as b {
+        component "KrakenD" as g
+    }
+
+    node "Front end" as fe {
+        component "Blazor Server" as bs
+    }
+
+    node "Matching Engine" as c {
+        component "engine1" as engine1
+        component "engine2" as engine2
+        database "Redis" as c1
+        database "PostgreSQL" as db1
+
+        engine1 <--> c1
+        engine1 <--> db1
+        engine2 <--> c1
+        engine2 <--> db1
+    }
+
+    node "Instrument Service" as f {
+        component "instrument1" as instrument1
+        component "instrument2" as instrument2
+
+        database "Redis" as c3
+        database "PostgreSQL" as db3
+
+        instrument1 <--> c3
+        instrument1 <--> db3
+        instrument2 <--> c3
+        instrument2 <--> db3
+    }
+
+    node "Portfolio Service" as e {
+        component "portfolio" as portfolio
+        database "Redis" as c2
+        database "PostgreSQL" as db2
+
+        portfolio <--> c2
+        portfolio <--> db2
+    }
+
+    node "Message Broker" as mb {
+        component "Kafka" as kaf
+    }
+
+    node "Observability" as obs {
+        component "Logstash" as log
+        component "ElasticSearch" as es
+        component "Kibana" as kib
+
+        log --> es
+        kib <--> es
+    }
+
+    cl1 --> balancer
+    cl2 --> balancer
+    cl3 --> balancer
+
+    bs --> g
+
+    balancer --> bs
+    balancer --> g
+
+    g --> e
+    g --> c
+    g --> f
+
+    mb <--> e
+    mb <--> c
+
+    e --> log
+    c --> log
+    f --> log
+}
+
+@enduml

@@ -1,0 +1,63 @@
+@startuml process_view
+
+' Define actors and swimlanes
+|Client|
+start
+:Client wants to fund portfolio;
+
+|UC-03: Approvisionnement du portefeuille (Dépôt virtuel)|
+:Saisie du montant;
+if (Montant valide (min/max)?) then (Oui)
+  :Création d'une transaction Pending;
+  :Envoi de requête au système de paiement;
+  if (Transaction acceptée?) then (Oui)
+    :Ajout du montant au solde;
+    :Mise à jour de la transaction (Terminée);
+    |Client|
+    :Notification du client (Solde augmenté);
+    |UC-03: Approvisionnement du portefeuille (Dépôt virtuel)|
+  else (Non)
+    |Client|
+    :Notification d'erreur (Système de paiement refuse);
+    |UC-03: Approvisionnement du portefeuille (Dépôt virtuel)|
+  endif
+else (Non)
+  |Client|
+  :Notification d'erreur (Montant invalide);
+  |UC-03: Approvisionnement du portefeuille (Dépôt virtuel)|
+endif
+
+|Client|
+:Client veut placer un ordre;
+|UC-05: Placement d'un ordre|
+:Remplissage du formulaire (Achat/Vente, Type, Instrument, Qte, Prix, Durée);
+
+if (Contrôles Pré-Trade valides?) then (Oui)
+  :Création de l'ordre;
+  fork
+    |UC-05: Placement d'un ordre|
+    :Notification de l'ordre accepté;
+  fork again
+    |UC-07: Appariement interne & Exécution (Matching Engine)|
+    :Déclenchement: Insertion de l'ordre dans le carnet;
+    :Recherche de la meilleure contrepartie;
+    if (Contrepartie trouvée?) then (Oui)
+      :Création d'une ou plusieurs exécutions;
+      :Mise à jour de l'ordre (Exécuté/Partiel);
+      :Mise à jour des transactions;
+      :Mise à jour du carnet d'ordres;
+      :Émission de notification d'exécution;
+    else (Non)
+      :L'ordre reste en attente dans le carnet d'ordres;
+      :Mise à jour de l'ordre (En attente);
+    endif
+    |UC-07: Appariement interne & Exécution (Matching Engine)|
+  end fork
+else (Non)
+  |Client|
+  :Notification d'erreur (Contrôle invalide);
+endif
+
+stop
+
+@enduml

@@ -1,0 +1,1 @@
+Les tests de charge ont été effectué avec K6 et visualisé avec Grafana.

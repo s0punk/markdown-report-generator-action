@@ -92,7 +92,7 @@ Persistence: Base de données PostgreSQL
 - Persistence, base de données SQL, ACID
 
 ## 9. Décisions d'architecture
-Voir la liste des ADRs en annexe.
+<!-- include:files path="/example/docs/adr/" -->
 
 ## 10. Exigences qualité
 

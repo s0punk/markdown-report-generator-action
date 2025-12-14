@@ -3,9 +3,13 @@ description: Report generator that takes multiple .md files from a source and co
 
 inputs:
   docs-path:
+    required: true
     default: docs/
   output-path:
+    required: true
     default: docs/report.md
+  blacklist:
+    required: false
 
 runs:
   using: composite
@@ -23,4 +27,5 @@ runs:
       run: |
         python ${{ github.action_path }}/src/generate_report.py \
           --docs ${{ inputs.docs-path }} \
-          --output ${{ inputs.output-path }}
+          --output ${{ inputs.output-path }} \
+          --blacklist "${{ inputs.blacklist-folders }}"

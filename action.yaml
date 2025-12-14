@@ -1,0 +1,26 @@
+name: Generate Documentation Reports
+description: Report generator that takes multiple .md files from a source and combines them into a single .md file.
+
+inputs:
+  docs-path:
+    default: docs/
+  output-path:
+    default: docs/
+
+runs:
+  using: composite
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        pip install -r ${{ github.action_path }}/requirements.txt
+
+    - name: Generate reports
+      run: |
+        python ${{ github.action_path }}/src/generate_report.py \
+          --docs ${{ inputs.docs-path }} \
+          --output ${{ inputs.output-path }}

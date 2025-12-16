@@ -9,6 +9,10 @@ class HorizontalTableStrategy(FileInsertStrategy):
 class TableStrategy(FileInsertStrategy):
     def insert(content: str) -> str:
         pass
+
+class RawStrategy(FileInsertStrategy):
+    def insert(content: str) -> str:
+        return content
     
 def parse_headers(content):
     headers = []

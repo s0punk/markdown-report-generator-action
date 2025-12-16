@@ -1,12 +1,15 @@
+from os import listdir
+from os.path import isfile
+from file_insert_strategy import *
+
 def preprocess_file(content):
-    append_subcollections(content)
+    content = find_subcollections(content)
 
     # Format lists.
     
-
     return content
 
-def append_subcollections(content):
+def find_subcollections(content):
     include_index = content.find("<!-- include:files")
     while include_index != -1:
         include_block = content[include_index:content.find("-->", include_index) + 3]
@@ -26,8 +29,21 @@ def append_subcollections(content):
 
             match strat:
                 case "h-table":
-                    pass
+                    insert_strategy = HorizontalTableStrategy()
                 case "table":
+                    insert_strategy = TableStrategy()
                     pass
+                case _:
+                    insert_strategy = RawStrategy()
+            
+            content = read_subcollection(content, path, insert_strategy)
 
         include_index = content.find("<!-- include:files", include_index + 1)
+
+    return content
+
+def read_subcollection(content, path: str, insert_strategy: FileInsertStrategy):
+    files = [e for e in listdir(path) if isfile(e) and e.endswith(".md")]
+    print(f"Found {len(files)} files in collection {path}")
+
+    return content

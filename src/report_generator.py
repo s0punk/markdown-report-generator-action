@@ -1,7 +1,6 @@
 import argparse
 from os import listdir
 from os.path import isfile, join
-from file_insert_strategy import *
 from preprocessor import preprocess_file
 
 parser = argparse.ArgumentParser()
@@ -24,6 +23,7 @@ def start_generation():
     if args.blacklist:
         args.blacklist = args.blacklist.split(",")
 
+    print("Starting report generation")
     append_to_report(args.docs, None)
 
     print(f"Report completed at {args.output}.")
@@ -38,7 +38,7 @@ def append_to_report(path, element):
         append_file(full_path)
     else:
         sub_elements = [e for e in listdir(full_path) if not e in args.blacklist]
-        print(f"Appending {len(sub_elements)} elements to report.")
+        print(f"\nLooking at {len(sub_elements)} elements to append to the report.")
 
         for e in sub_elements:
             append_to_report(full_path, e)

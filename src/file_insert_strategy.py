@@ -9,7 +9,12 @@ class HorizontalTableStrategy(FileInsertStrategy):
 class TableStrategy(FileInsertStrategy):
     def insert(content: str) -> str:
         pass
+    
+def parse_headers(content):
+    headers = []
 
-class RawStrategy(FileInsertStrategy):
-    def insert(content: str) -> str:
-        return content
+    for line in content.split("\n"):
+        if "## " in line:
+            headers.append(line.replace("## ", ""))
+    
+    return headers

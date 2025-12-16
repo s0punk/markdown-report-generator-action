@@ -25,7 +25,7 @@ runs:
 
     - name: Generate reports
       run: |
-        python ${{ github.action_path }}/src/generate_report.py \
+        python ${{ github.action_path }}/src/report_generator.py \
           --docs ${{ inputs.docs-path }} \
           --output ${{ inputs.output-path }} \
           --blacklist "${{ inputs.blacklist-folders }}"

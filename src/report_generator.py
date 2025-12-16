@@ -1,6 +1,8 @@
 import argparse
 from os import listdir
 from os.path import isfile, join
+from file_insert_strategy import *
+from preprocessor import preprocess_file
 
 parser = argparse.ArgumentParser()
 
@@ -66,15 +68,6 @@ def append_file(path):
         
     except IOError as e:
         print(f"Could not update the report: {e}")
-
-def preprocess_file(content):
-    # Make necessary file inserts.
-
-
-    # Format lists.
-    
-
-    return content
 
 if __name__ == "__main__":
     start_generation()

@@ -18,7 +18,11 @@
 
 ### Scénarios
 ![Vue de déploiement](/docs/diagrams/execution_view.svg) \
-<i>Le diagramme ci-haut démontre les cas d'utilisation de la première phase. Pour plus de détails, voir la section pour la priorisation des cas d'utilisation.</i># Arc42 et DDD
+<i>Le diagramme ci-haut démontre les cas d'utilisation de la première phase. Pour plus de détails, voir la section pour la priorisation des cas d'utilisation.</i>
+
+<div style="page-break-after: always;"></div>
+
+# Arc42 et DDD
 
 Ce document, basé sur le modèle arc42, décrit une plateforme de courtage en ligne pour investisseurs particuliers dans le cadre du cours LOG430.
 
@@ -112,7 +116,7 @@ Persistence: Base de données PostgreSQL
 - Persistence, base de données SQL, ACID
 
 ## 9. Décisions d'architecture
-<!-- include:files path="/example/docs/adr/" -->
+<!-- include:files path="/example/docs/adr/"  -->
 
 ## 10. Exigences qualité
 
@@ -153,7 +157,11 @@ Code simple et bien structuré pour faciliter l'évolution.
 | **Good Till Cancelled** (GTC) | Ordre qui reste active jusqu’à annulation par le client (ou expiration système) |
 | **Immediate-Or-Cancel** (IOC) | Exécution immédiate d'un ordre, partiel possible, reste annulé |
 | **Fill-Or-Kill** (FOK) | Ordre qui doit être exécuté entièrement tout de suite, sinon annulé |
-| **Good-Till-Date** (GTD) | Ordre qui est actif jusqu’à une date/heure précise. |### Phase 1 - Architecture Monolithique
+| **Good-Till-Date** (GTD) | Ordre qui est actif jusqu’à une date/heure précise. |
+
+<div style="page-break-after: always;"></div>
+
+### Phase 1 - Architecture Monolithique
 #### Tests de charge
 Les tests de charge de la phase 1 montrent que la plateforme respecte en grande partie les exigences définies dans le cahier des charges. Celui-ci demandait notamment un débit minimal de 300 requêtes par seconde, un temps de réponse P95 inférieur à 500 ms et une disponibilité de 90%.
 
@@ -170,7 +178,11 @@ En résumé, l’architecture actuelle satisfait et dépasse les performances ex
 ![alt text](/docs/performance/phase-1/image-6.png)
 ![alt text](/docs/performance/phase-1/image-7.png)
 ![alt text](/docs/performance/phase-1/image-8.png)
-![alt text](/docs/performance/phase-1/image-9.png)### Phase 2 - Architecture Microservices
+![alt text](/docs/performance/phase-1/image-9.png)
+
+<div style="page-break-after: always;"></div>
+
+### Phase 2 - Architecture Microservices
 #### Tests de charge
 Les tests de charge de la phase 2 confirment que la plateforme continue de répondre efficacement aux exigences du cahier des charges. Pour cette phase, les objectifs étaient : maintenir un débit d’au moins 800 requêtes par seconde, conserver un temps de réponse P95 sous les 150 ms et une disponibilité de 95,5%.
 
@@ -184,7 +196,11 @@ En conclusion, la plateforme satisfait entièrement les exigences de la phase 2 
 ![alt text](/docs/performance/phase-2/image.png)
 ![alt text](/docs/performance/phase-2/image-2.png)
 ![alt text](/docs/performance/phase-2/image-3.png)
-![alt text](/docs/performance/phase-2/image-4.png)### Phase 3 - Architecture Événementielle
+![alt text](/docs/performance/phase-2/image-4.png)
+
+<div style="page-break-after: always;"></div>
+
+### Phase 3 - Architecture Événementielle
 #### Tests de charge
 Les tests de charge de la phase 3 démontre que la plateforme n'arrive pas tout à fait à répondre aux exigences du cahier des charges. Pour cette phase, les objectifs étaient : maintenir un débit d’au moins 1200 requêtes par seconde, conserver un temps de réponse P95 sous les 100 ms et une disponibilité de 99,9%.
 
@@ -198,12 +214,24 @@ En conclusion, la plateforme ne satisfait pas les exigences de la phase 3. Par c
 ![alt text](/docs/performance/phase-3/image-1.png)
 ![alt text](/docs/performance/phase-3/image-2.png)
 ![alt text](/docs/performance/phase-3/image-3.png)
-![alt text](/docs/performance/phase-3/image-4.png)Les tests de charge ont été effectué avec K6 et visualisé avec Grafana.## CI/CD
+![alt text](/docs/performance/phase-3/image-4.png)
+
+<div style="page-break-after: always;"></div>
+
+Les tests de charge ont été effectué avec K6 et visualisé avec Grafana.
+
+<div style="page-break-after: always;"></div>
+
+## CI/CD
 Plusieurs workflows sont utilisé afin d'optimiser et d'automatiser certaines tâches:
 - ```deploy.yaml```: Déploie le système sur la machine virtuelle fournit pas l'ÉTS.
 - ```tests.yaml```: Exécute les tests.
 - ```plantuml.yaml```: Génère les fichiers .svg à partir des diagrames Plantuml. Ces images sont ensuite référencé dans les différentes parties du rapport.
-- ```report.yaml```: Automatise la création de ce rapport en compilant tous les fichiers de documentation dans le dossier ```/docs``` et en générant/formattant tout autre contenu nécessaire.## Documentation des APIs
+- ```report.yaml```: Automatise la création de ce rapport en compilant tous les fichiers de documentation dans le dossier ```/docs``` et en générant/formattant tout autre contenu nécessaire.
+
+<div style="page-break-after: always;"></div>
+
+## Documentation des APIs
 Le dossier ```docs/collection``` contient une collection Postman. Celle-ci présente tous les endpoints de tous les APIs des différents microservices (Matching engine, Portfolio et instruments)
 
 Portfolio API:
@@ -213,7 +241,11 @@ Instrument API:
 ![Instrument API](/docs/remarks/image-1.png)
 
 Matching Engine API:
-![Matching Engine API](/docs/remarks/image-2.png)## Structure des logs
+![Matching Engine API](/docs/remarks/image-2.png)
+
+<div style="page-break-after: always;"></div>
+
+## Structure des logs
 BrokerX utilise le ```ELK``` stack pour gérer ses logs. Un pipeline Logstash a été configuré afin d'identifier la provenance de chaque log, ce qui permet d'associer un microservice à chaque log. De plus, un dashboard Kibana a été configuré pour observer plusieurs éléments intéressants:
 - Une liste des derniers logs
 - Le nombre total de logs
@@ -224,7 +256,11 @@ BrokerX utilise le ```ELK``` stack pour gérer ses logs. Un pipeline Logstash a 
 
 Lorsque le conteneur ```brokerx-observability``` est en marche, le dashboard est disponible à l'adresse http://localhost:5601/app/dashboards#/view/4e774102-803c-46ba-8fc9-ac47032e3333?_g=(filters:!())
 
-![alt text](/docs/remarks/image-3.png)# Runbook
+![alt text](/docs/remarks/image-3.png)
+
+<div style="page-break-after: always;"></div>
+
+# Runbook
 Voici les étapes à suivre afin de démarrer le système:
 1. Télécharger et décompresser le dossier « BrokerX »
 2. Lançer le logiciel Docker
@@ -245,7 +281,11 @@ cd Observability && docker compose up --build -d && cd ..
 
 Au moment d'accéder à l'application, les conteneurs Docker devraient avoir ces états:
 ![alt text](/docs/usage/image.png)
-![alt text](/docs/usage/image-1.png)# Guide d'utilisation
+![alt text](/docs/usage/image-1.png)
+
+<div style="page-break-after: always;"></div>
+
+# Guide d'utilisation
 ## Créer un compte
 1. Se rendre à l'adresse ```/sign-up``` ou depuis la page de connexion, cliquer sur "Aucun compte? Inscrivez-vous ici".
 2. Remplir le formulaire - Ex:
@@ -327,3 +367,6 @@ Au moment d'accéder à l'application, les conteneurs Docker devraient avoir ces
 4. Finalement, il faut cliquer sur « Chercher » pour obtenir les cotations.
 
 ![alt text](/docs/usage/image-9.png)
+
+<div style="page-break-after: always;"></div>
+

@@ -36,14 +36,9 @@ def find_subcollections(content):
                 case _:
                     insert_strategy = RawStrategy()
             
-            content = read_subcollection(content, path, insert_strategy)
+            content = content.replace(include_block, "")
+            content = insert_strategy.insert(content, path, include_index)
 
         include_index = content.find("<!-- include:files", include_index + 1)
-
-    return content
-
-def read_subcollection(content, path: str, insert_strategy: FileInsertStrategy):
-    files = [e for e in listdir(path) if isfile(e) and e.endswith(".md")]
-    print(f"Found {len(files)} files in collection {path}")
 
     return content

@@ -37,7 +37,7 @@ def append_to_report(path, element):
         
         append_file(full_path)
     else:
-        sub_elements = [e for e in listdir(full_path) if not e in args.blacklist]
+        sub_elements = [e for e in sorted(listdir(full_path)) if not e in args.blacklist]
         print(f"\nLooking at {len(sub_elements)} elements to append to the report.")
 
         for e in sub_elements:

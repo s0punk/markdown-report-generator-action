@@ -1,13 +1,7 @@
-from os import listdir
-from os.path import isfile
 from file_insert_strategy import *
 
 def preprocess_file(content):
-    content = find_subcollections(content)
-
-    # Format lists.
-    
-    return content
+    return find_subcollections(content)
 
 def find_subcollections(content):
     include_index = content.find("<!-- include:files")

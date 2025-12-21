@@ -92,7 +92,7 @@ Persistence: Base de données PostgreSQL
 - Persistence, base de données SQL, ACID
 
 ## 9. Décisions d'architecture
-<!-- include:files path="example/docs/adr/"  -->
+<!-- include:files path="example/docs/adr/" insert="h-table"  -->
 
 ## 10. Exigences qualité
 
@@ -134,3 +134,5 @@ Code simple et bien structuré pour faciliter l'évolution.
 | **Immediate-Or-Cancel** (IOC) | Exécution immédiate d'un ordre, partiel possible, reste annulé |
 | **Fill-Or-Kill** (FOK) | Ordre qui doit être exécuté entièrement tout de suite, sinon annulé |
 | **Good-Till-Date** (GTD) | Ordre qui est actif jusqu’à une date/heure précise. |
+
+<!-- include:files path="example/docs/uc/" insert="h-table"  -->

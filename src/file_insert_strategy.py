@@ -150,12 +150,13 @@ def format_lists(text: str) -> str:
             i += 1
             continue
 
-        if re.match(r'^\s*(?:[0-9]+[.)]|-)\s+', lines[i]):
+        if re.match(r'^\s+(?:[0-9]+[.)]|-)\s+', lines[i]):
             for j in range(i, len(lines)):
-                if j == len(lines) - 1 or not re.match(r'^\s*(?:[0-9]+[.)]|-)\s+', lines[j]):
-                    sublines = textwrap.dedent("\n".join(lines[i:j + 1]))
+                match = re.match(r'^\s+(?:[0-9]+[.)]|-)\s+', lines[j])
+                if j == len(lines) - 1 or not match:
+                    sublines = textwrap.dedent("\n".join(lines[i:j + 1 if j == len(lines) - 1 and match else j]))
                     out.append(format_lists(sublines))
-                    i = j + 1
+                    i = j + 1 if j == len(lines) - 1 and match else j - 1
                     break
             i += 1
             continue

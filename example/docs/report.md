@@ -118,25 +118,27 @@ Persistence: Base de données PostgreSQL
 ## 9. Décisions d'architecture
 
 <table style="page-break-inside: avoid; break-inside: avoid;">
-<tr><th>ADR</th><td><p>001</p></td></tr>
-<tr><th>Nom</th><td><p>Utilisation d'une architecture hexagonale (ports and adapters)</p></td></tr>
-<tr><th>Statut</th><td><p>Acceptée</p></td></tr>
-<tr><th>Contexte</th><td><p>Le système BrokerX doit être flexible et maintenable facilement. La plateforme contient une logique métier riche et évolutive qui doit être indépendante des autres composants et technologies utilisés. De plus, nous savons que l'architecture du système évoluera en une architecture évenementielle et microservices.</p></td></tr>
-<tr><th>Décision</th><td><p>Nous adopterons une architecture hexagonale (ports and adapter) en tandem avec le repository pattern.</p></td></tr>
-<tr><th>Conséquences</th><td><p>L'adoption de ce style d'architecture est plus long à mettre en place car elle est plus complexe que MVC par exemple. Cependant, ce style d'architecture apporte plusieurs avantages:</p>
+<tr><th>ADR</th><td>001</td></tr>
+<tr><th>Nom</th><td>Utilisation d'une architecture hexagonale (ports and adapters)</td></tr>
+<tr><th>Statut</th><td>Acceptée</td></tr>
+<tr><th>Contexte</th><td>Le système BrokerX doit être flexible et maintenable facilement. La plateforme contient une logique métier riche et évolutive qui doit être indépendante des autres composants et technologies utilisés. De plus, nous savons que l'architecture du système évoluera en une architecture évenementielle et microservices.</td></tr>
+<tr><th>Décision</th><td>Nous adopterons une architecture hexagonale (ports and adapter) en tandem avec le repository pattern.</td></tr>
+<tr><th>Conséquences</th><td>L'adoption de ce style d'architecture est plus long à mettre en place car elle est plus complexe que MVC par exemple. Cependant, ce style d'architecture apporte plusieurs avantages:
+
 <ul>
-<li>Séparation des responsabilités: Faible couplage et forte cohésion.
-<li>Testabilité: Facile de tester chaque module indépendement.
-<li>Évolutivité: Facile de changer les adapteurs au besoin pour faire évoluer la plateforme. Facilitera aussi le changement vers les autres styles d'architecture.
+<li>Séparation des responsabilités: Faible couplage et forte cohésion.</li>
+<li>Testabilité: Facile de tester chaque module indépendement.</li>
+<li>Évolutivité: Facile de changer les adapteurs au besoin pour faire évoluer la plateforme. Facilitera aussi le changement vers les autres styles d'architecture.</li>
 </ul></td></tr>
 </table><br />
 <table style="page-break-inside: avoid; break-inside: avoid;">
-<tr><th>ADR</th><td><p>002</p></td></tr>
-<tr><th>Nom</th><td><p>Utilisation d'une base de données SQL (PostgreSQL)</p></td></tr>
-<tr><th>Statut</th><td><p>Acceptée</p></td></tr>
-<tr><th>Contexte</th><td><p>Le domaine métier de BrokerX a plusieurs exigences au niveau des données. Celles-ci doivent rester cohérente et leur lecture doit être fiable et performante.</p></td></tr>
-<tr><th>Décision</th><td><p>Nous allons utiliser une base de données SQL, plus précisement, PostgreSQL.</p></td></tr>
-<tr><th>Conséquences</th><td><p>PostgreSQL permet aussi de faire des requêtes complexes et puissantes. En revanche, il sera plus compliqué d'effectuer des migrations si nécessaire, et la scalability horizontale est plus difficile avec une base de données SQL.</p></td></tr>
+<tr><th>ADR</th><td>002</td></tr>
+<tr><th>Nom</th><td>Utilisation d'une base de données SQL (PostgreSQL)</td></tr>
+<tr><th>Statut</th><td>Acceptée</td></tr>
+<tr><th>Contexte</th><td>Le domaine métier de BrokerX a plusieurs exigences au niveau des données. Celles-ci doivent rester cohérente et leur lecture doit être fiable et performante.</td></tr>
+<tr><th>Décision</th><td>Nous allons utiliser une base de données SQL, plus précisement, PostgreSQL.</td></tr>
+<tr><th>Conséquences</th><td>L'utilisation d'une base de données SQL nous permet de bonifier de ses propriétés ACID. Disons que dans le future, on scale horizontalement le moteur d'appariement. L'isolation des transactions fait en sorte qu'il n'y aura pas de conflit lors de l'exécution d'ordres. \
+PostgreSQL permet aussi de faire des requêtes complexes et puissantes. En revanche, il sera plus compliqué d'effectuer des migrations si nécessaire, et la scalability horizontale est plus difficile avec une base de données SQL.</td></tr>
 </table><br />
 
 ## 10. Exigences qualité
@@ -182,15 +184,18 @@ Code simple et bien structuré pour faciliter l'évolution.
 
 
 <table style="page-break-inside: avoid; break-inside: avoid;">
-<tr><th>Objectif</th><td><p>Permettre à un nouvel utilisateur de créer un compte sur la plateforme en fournissant ses  informations personnelles, de vérifier son identité selon les exigences réglementaires  (KYC/AML) et d’activer son accès à la plateforme. Ce cas établit la relation de confiance initiale  entre l’utilisateur et BrokerX. </p></td></tr>
+<tr><th>Objectif</th><td>Permettre à un nouvel utilisateur de créer un compte sur la plateforme en fournissant ses 
+informations personnelles, de vérifier son identité selon les exigences réglementaires 
+(KYC/AML) et d’activer son accès à la plateforme. Ce cas établit la relation de confiance initiale 
+entre l’utilisateur et BrokerX. </td></tr>
 <tr><th>Acteurs</th><td><ul>
-<li>AC-01: Client
+<li>AC-01: Client</li>
 </ul></td></tr>
 <tr><th>Préconditions</th><td><ul>
-<li>Aucune
+<li>Aucune</li>
 </ul></td></tr>
 <tr><th>Postconditions</th><td><ul>
-<li>Compte créé avec l'état approprié (pending, active ou rejected)
+<li>Compte créé avec l'état approprié (pending, active ou rejected)</li>
 </ul></td></tr>
 <tr><th>Flux principal</th><td><ol>
 <li>Le client veut s'inscrire à la platforme.</li>
@@ -202,29 +207,27 @@ Code simple et bien structuré pour faciliter l'évolution.
 <li>Le système met à jour le compte avec l'état "active".</li>
 </ol></td></tr>
 <tr><th>Flux alternatifs</th><td><ul>
-<li>3.1 Une ou plusieurs données est invalide
+<li>3.1 Une ou plusieurs données est invalide</li>
 <ol>
 <li>Le système marque les champs invalide avec un message d'erreur.</li>
 <li>Retour à l'étape 2 du CU.</li>
 </ol>
-<li>3.2 L'adresse email est déjà utilisé par un autre compte
-<ol>
-<li>Le système indique au client que l'adresse saisie est déjà utilisé.</li>
-<li>Retour à l'étape 2 du CU.</li>
-</ol></li>
+
 </ul></td></tr>
 </table><br />
 <table style="page-break-inside: avoid; break-inside: avoid;">
-<tr><th>Objectif</th><td><p>Garantir un accès sécurisé à la plateforme en permettant aux clients de s’authentifier avec  identifiant/mot de passe et, le cas échéant, via un mécanisme de multi-facteurs (OTP, TOTP,  WebAuthn). Ce cas protège les comptes contre les accès non autorisés.</p></td></tr>
+<tr><th>Objectif</th><td>Garantir un accès sécurisé à la plateforme en permettant aux clients de s’authentifier avec 
+identifiant/mot de passe et, le cas échéant, via un mécanisme de multi-facteurs (OTP, TOTP, 
+WebAuthn). Ce cas protège les comptes contre les accès non autorisés.</td></tr>
 <tr><th>Acteurs</th><td><ul>
-<li>AC-01: Client
+<li>AC-01: Client</li>
 </ul></td></tr>
 <tr><th>Préconditions</th><td><ul>
-<li>Le client est déconnecté
-<li>Le compte du client est à l'état "active"
+<li>Le client est déconnecté</li>
+<li>Le compte du client est à l'état "active"</li>
 </ul></td></tr>
 <tr><th>Postconditions</th><td><ul>
-<li>Une session est établie
+<li>Une session est établie</li>
 </ul></td></tr>
 <tr><th>Flux principal</th><td><ol>
 <li>Le client veut se connecter à la plateforme.</li>
@@ -235,30 +238,29 @@ Code simple et bien structuré pour faciliter l'évolution.
 <li>Le système créer une session et envoie un token au client.</li>
 </ol></td></tr>
 <tr><th>Flux alternatifs</th><td><ul>
-<li>3.1 Les identifiants saisies sont invalide
+<li>3.1 Les identifiants saisies sont invalide</li>
 <ol>
 <li>Le système indique l'erreur au client</li>
 <li>Retour à l'étape 2 du CU</li>
 </ol>
-<li>5.1 Le code saisie ne correspond pas à celui envoyé
 <ol>
-<li>Le système indique l'erreur au client</li>
 <li>Le système bloque temporairement le compte du client (5 minutes)</li>
-<li>Fin du CU</li>
-</ol></li>
+</ol>
 </ul></td></tr>
 </table><br />
 <table style="page-break-inside: avoid; break-inside: avoid;">
-<tr><th>Objectif</th><td><p>Donner aux utilisateurs la possibilité de créditer leur portefeuille virtuel en effectuant des  dépôts simulés, afin de disposer de liquidités nécessaires pour placer des ordres d’achat. Ce  cas assure la disponibilité des fonds pour les opérations boursières.</p></td></tr>
+<tr><th>Objectif</th><td>Donner aux utilisateurs la possibilité de créditer leur portefeuille virtuel en effectuant des 
+dépôts simulés, afin de disposer de liquidités nécessaires pour placer des ordres d’achat. Ce 
+cas assure la disponibilité des fonds pour les opérations boursières.</td></tr>
 <tr><th>Acteurs</th><td><ul>
-<li>AC-01: Client
+<li>AC-01: Client</li>
 </ul></td></tr>
 <tr><th>Préconditions</th><td><ul>
-<li>Le client est connecté
+<li>Le client est connecté</li>
 </ul></td></tr>
 <tr><th>Postconditions</th><td><ul>
-<li>Le solde du portefeuille du client a augmenté selon le montant choisit
-<li>Une transaction a été ajouté au portfolio du client
+<li>Le solde du portefeuille du client a augmenté selon le montant choisit</li>
+<li>Une transaction a été ajouté au portfolio du client</li>
 </ul></td></tr>
 <tr><th>Flux principal</th><td><ol>
 <li>Le client veut approvisionner son portefeuille virtuel.</li>
@@ -268,26 +270,24 @@ Code simple et bien structuré pour faciliter l'évolution.
 <li>Le système ajoute le montant au solde du portefeuille, met à jour la transaction et notifie le client.</li>
 </ol></td></tr>
 <tr><th>Flux alternatifs</th><td><ul>
-<li>3.1 Le montant saisie est refusé
+<li>3.1 Le montant saisie est refusé</li>
 <ol>
 <li>Le système notifie le client et lui demande de saisir un montant valide. Fin du CU.</li>
 </ol>
-<li>4.1 Le système de paiement refuse la transaction 
-<ol>
-<li>Le système notifie le client et lui demande de réessayer. Fin du CU.</li>
-</ol></li>
 </ul></td></tr>
 </table><br />
 <table style="page-break-inside: avoid; break-inside: avoid;">
-<tr><th>Objectif</th><td><p>Offrir aux clients un accès en temps réel aux cotations et carnets d’ordres pour les  instruments suivis. Ce cas permet aux investisseurs de prendre des décisions éclairées grâce à  des données actualisées.</p></td></tr>
+<tr><th>Objectif</th><td>Offrir aux clients un accès en temps réel aux cotations et carnets d’ordres pour les 
+instruments suivis. Ce cas permet aux investisseurs de prendre des décisions éclairées grâce à 
+des données actualisées.</td></tr>
 <tr><th>Acteurs</th><td><ul>
-<li>AC-01: Client
+<li>AC-01: Client</li>
 </ul></td></tr>
 <tr><th>Préconditions</th><td><ul>
-<li>Le client est connecté
+<li>Le client est connecté</li>
 </ul></td></tr>
 <tr><th>Postconditions</th><td><ul>
-<li>Flux de données établi
+<li>Flux de données établi</li>
 </ul></td></tr>
 <tr><th>Flux principal</th><td><ol>
 <li>Le client veut s'abonner à un instrument</li>
@@ -296,64 +296,57 @@ Code simple et bien structuré pour faciliter l'évolution.
 <li>Le client reçoit les mises à jour périodiquement</li>
 </ol></td></tr>
 <tr><th>Flux alternatifs</th><td><ul>
-<li>3.1 Une erreur se produit lors de l'ouverture du canal
-<ol>
-<li>Le système notifie le client, fin du CU</li>
-</ol></li>
+<li>3.1 Une erreur se produit lors de l'ouverture du canal</li>
+
 </ul></td></tr>
 </table><br />
 <table style="page-break-inside: avoid; break-inside: avoid;">
-<tr><th>Objectif</th><td><p>Permettre aux clients de soumettre des ordres d’achat ou de vente (marché ou limite), qui  seront validés par des contrôles pré-trade et insérés dans le moteur d’appariement. Ce cas  constitue le cœur fonctionnel de la plateforme de courtage.</p></td></tr>
+<tr><th>Objectif</th><td>Permettre aux clients de soumettre des ordres d’achat ou de vente (marché ou limite), qui 
+seront validés par des contrôles pré-trade et insérés dans le moteur d’appariement. Ce cas 
+constitue le cœur fonctionnel de la plateforme de courtage.</td></tr>
 <tr><th>Acteurs</th><td><ul>
-<li>AC-01: Client
+<li>AC-01: Client</li>
 </ul></td></tr>
 <tr><th>Préconditions</th><td><ul>
-<li>Le client est connecté
+<li>Le client est connecté</li>
 </ul></td></tr>
 <tr><th>Postconditions</th><td><ul>
-<li>L'ordre est accepté et envoyée au moteur d'appariement
+<li>L'ordre est accepté et envoyée au moteur d'appariement</li>
 </ul></td></tr>
 <tr><th>Flux principal</th><td><ol>
 <li>Le client veut placer un nouvel ordre.</li>
 <li>Le client rempli le formulaire:</li>
 <ul>
-</ol>
-<li>Achat ou vente
-<li>Ordre au marché ou ordre à cours limite
-<li>Instrument (symbole)
-<li>Quantité d'action
-<li>Prix limite (si ordre à cours limite)
-<li>Durée de l'ordre (DAY, GTC, IOC, FOK, GTD)
+<li>Achat ou vente</li>
+<li>Ordre au marché ou ordre à cours limite</li>
+<li>Instrument (symbole)</li>
+<li>Quantité d'action</li>
+<li>Prix limite (si ordre à cours limite)</li>
+<li>Durée de l'ordre (DAY, GTC, IOC, FOK, GTD)</li>
 </ul>
-<ol>
-<li>Le système valide les éléments suivant:</li>
 <ul>
-</ol>
-<li>La quantité est supérieur à 0
-<li>Le portfeuille du client possède des fonds suffisant
-<li>L'instrument est actif
-<li>Empêcher les short-sells
+<li>Le portfeuille du client possède des fonds suffisant</li>
+<li>L'instrument est actif</li>
+<li>Empêcher les short-sells</li>
 </ul>
-<ol>
-<li>Le système créer l'ordre et l'envoie au moteur d'appariement (déclanchement de UC-07)</li>
 </ol></td></tr>
 <tr><th>Flux alternatifs</th><td><ul>
-<li>3.1 Un élément est invalide
-<ol>
-<li>Le système notifie le client de l'erreur. Fin du CU.</li>
-</ol></li>
+<li>3.1 Un élément est invalide</li>
+
 </ul></td></tr>
 </table><br />
 <table style="page-break-inside: avoid; break-inside: avoid;">
-<tr><th>Objectif</th><td><p>Offrir la possibilité de modifier ou d’annuler un ordre actif dans le carnet tant qu’il n’est pas  totalement exécuté. Ce cas donne de la flexibilité aux clients pour gérer leurs stratégies de  trading.</p></td></tr>
+<tr><th>Objectif</th><td>Offrir la possibilité de modifier ou d’annuler un ordre actif dans le carnet tant qu’il n’est pas 
+totalement exécuté. Ce cas donne de la flexibilité aux clients pour gérer leurs stratégies de 
+trading.</td></tr>
 <tr><th>Acteurs</th><td><ul>
-<li>AC-01: Client
+<li>AC-01: Client</li>
 </ul></td></tr>
 <tr><th>Préconditions</th><td><ul>
-<li>Le client est connecté
+<li>Le client est connecté</li>
 </ul></td></tr>
 <tr><th>Postconditions</th><td><ul>
-<li>L'ordre est modifié ou annulé
+<li>L'ordre est modifié ou annulé</li>
 </ul></td></tr>
 <tr><th>Flux principal</th><td><ol>
 <li>Le client veut modifier ou annuler un ordre qu'il a placé</li>
@@ -365,34 +358,28 @@ Code simple et bien structuré pour faciliter l'évolution.
 <li>Le système notifie le client que l'opération est terminée</li>
 </ol></td></tr>
 <tr><th>Flux alternatifs</th><td><ul>
-<li>3.1 Le client annule l'ordre
+<li>3.1 Le client annule l'ordre</li>
 <ol>
 <li>Le système marque l'ordre comme annulé et met à jour le carnet</li>
 <li>Redirection vers l'étape 7 du CU</li>
 </ol>
-<li>4.1 L'ordre n'est pas working ou partially filled
+<li>5.1 L'ordre est exécuté avant le verrouillage</li>
 <ol>
 <li>Le système indique au client que l'opération ne peut être effectuée, fin du CU</li>
 </ol>
-<li>5.1 L'ordre est exécuté avant le verrouillage
-<ol>
-<li>Le système indique au client que l'opération ne peut être effectuée, fin du CU</li>
-</ol>
-<li>6.1 Le contrôle pré-trade échoue
-<ol>
-<li>Le système indique au client que l'opération ne peut être effectuée, fin du CU</li>
-</ol></li>
 </ul></td></tr>
 </table><br />
 <table style="page-break-inside: avoid; break-inside: avoid;">
-<tr><th>Objectif</th><td><p>Assurer l’exécution automatique des ordres en interne selon les règles de priorité  (prix/temps) en rapprochant acheteurs et vendeurs. Ce cas fournit la mécanique centrale de  traitement des transactions sur la plateforme.</p></td></tr>
-<tr><th>Acteurs</th><td><p>Aucun (déclanché automatiquement par le système)</p></td></tr>
+<tr><th>Objectif</th><td>Assurer l’exécution automatique des ordres en interne selon les règles de priorité 
+(prix/temps) en rapprochant acheteurs et vendeurs. Ce cas fournit la mécanique centrale de 
+traitement des transactions sur la plateforme.</td></tr>
+<tr><th>Acteurs</th><td>Aucun (déclanché automatiquement par le système)</td></tr>
 <tr><th>Préconditions</th><td><ul>
-<li>Aucune
+<li>Aucune</li>
 </ul></td></tr>
 <tr><th>Postconditions</th><td><ul>
-<li>Une ou plusieurs exécution créées
-<li>Ordre mis à jour
+<li>Une ou plusieurs exécution créées</li>
+<li>Ordre mis à jour</li>
 </ul></td></tr>
 <tr><th>Flux principal</th><td><ol>
 <li>Le système veut effectuer l'appariement d'un ordre.</li>
@@ -401,25 +388,27 @@ Code simple et bien structuré pour faciliter l'évolution.
 <li>Le système émet une notification pour indiquer l'exécution.</li>
 <li>Le système met à jour les transactions et le carnet d'ordres.</li>
 </ol></td></tr>
-<tr><th>Flux alternatifs</th><td><p>Aucun</p></td></tr>
+<tr><th>Flux alternatifs</th><td>Aucun</td></tr>
 </table><br />
 <table style="page-break-inside: avoid; break-inside: avoid;">
-<tr><th>Objectif</th><td><p>Notifier les clients de l’état final de leurs ordres (exécuté partiellement ou totalement, rejeté), en  fournissant des informations précises et traçables. Ce cas garantit la transparence et la  confiance dans les transactions.</p></td></tr>
+<tr><th>Objectif</th><td>Notifier les clients de l’état final de leurs ordres (exécuté partiellement ou totalement, rejeté), en 
+fournissant des informations précises et traçables. Ce cas garantit la transparence et la 
+confiance dans les transactions.</td></tr>
 <tr><th>Acteurs</th><td><ul>
-<li>AC-01: Client
+<li>AC-01: Client</li>
 </ul></td></tr>
 <tr><th>Préconditions</th><td><ul>
-<li>Le client a un ordre "working"
+<li>Le client a un ordre "working"</li>
 </ul></td></tr>
 <tr><th>Postconditions</th><td><ul>
-<li>Le client a reçu une notification
+<li>Le client a reçu une notification</li>
 </ul></td></tr>
 <tr><th>Flux principal</th><td><ol>
 <li>L'UC-07 déclenche une exécution complète ou partielle.</li>
 <li>Le système enregistre l'exécution.</li>
 <li>Le système ajoute une notification au compte et l'envoie au client.</li>
 </ol></td></tr>
-<tr><th>Flux alternatifs</th><td><p>Aucun</p></td></tr>
+<tr><th>Flux alternatifs</th><td>Aucun</td></tr>
 </table><br />
 
 <div style="page-break-after: always;"></div>
@@ -632,4 +621,3 @@ Au moment d'accéder à l'application, les conteneurs Docker devraient avoir ces
 ![alt text](/docs/usage/image-9.png)
 
 <div style="page-break-after: always;"></div>
-

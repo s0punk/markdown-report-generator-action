@@ -1,7 +1,7 @@
 import re
 import argparse
 from os import listdir
-from os.path import isfile, join
+from os.path import isfile, join, basename
 from preprocessor import preprocess_file
 
 PAGE_BREAK = "<div style=\"page-break-after: always;\"></div>"
@@ -26,7 +26,11 @@ def start_generation():
 
     if args.blacklist:
         args.blacklist = args.blacklist.split(",")
+    else:
+        args.blacklist = []
 
+    args.blacklist.append(basename(args.output))
+    
     print("Starting report generation")
     append_to_report(args.docs, None)
 
@@ -95,6 +99,7 @@ def generate_toc():
             label = re.sub(r'^#+ ', '', header)
 
             toc += f"{"  " * level}- [{label}](#{label.lower().replace(' ', '-')})\n"
+        toc += f"\n\n{PAGE_BREAK}\n\n"
 
         pages = [m.start() for m in re.finditer(PAGE_BREAK, content)]
         

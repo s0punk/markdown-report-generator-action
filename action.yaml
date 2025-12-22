@@ -10,6 +10,8 @@ inputs:
     default: docs/report.md
   blacklist:
     required: false
+  table-of-content:
+    required: false
 
 runs:
   using: composite
@@ -28,4 +30,5 @@ runs:
         python ${{ github.action_path }}/src/report_generator.py \
           --docs ${{ inputs.docs-path }} \
           --output ${{ inputs.output-path }} \
-          --blacklist "${{ inputs.blacklist-folders }}"
+          --blacklist "${{ inputs.blacklist }}" \
+          --toc "${{ inputs.table-of-content }}"

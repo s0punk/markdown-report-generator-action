@@ -12,6 +12,10 @@ inputs:
     required: false
   table-of-content:
     required: false
+  presentation-page:
+    required: false
+  presentation-placeholders:
+    required: false
 
 runs:
   using: composite
@@ -32,5 +36,7 @@ runs:
           --docs ${{ inputs.docs-path }} \
           --output ${{ inputs.output-path }} \
           --blacklist "${{ inputs.blacklist }}" \
-          --toc "${{ inputs.table-of-content }}"
+          --toc "${{ inputs.table-of-content }}" \
+          --presentation "${{ inputs.presentation-page }}" \
+          --placeholders "${{ inputs.presentation-placeholders }}"
       shell: bash

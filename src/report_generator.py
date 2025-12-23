@@ -12,12 +12,17 @@ parser.add_argument("--docs", type=str)
 parser.add_argument("--output", type=str)
 parser.add_argument("--blacklist", type=str)
 parser.add_argument("--toc", type=int)
+parser.add_argument("--presentation", type=str)
+parser.add_argument("--placeholders", type=str)
 
 args = parser.parse_args()
 
 current_report_content = ""
 
 def start_generation():
+    global current_report_content
+    current_report_content = ""
+
     if not args.docs:
         raise Exception("Docs path not provided.")
 
@@ -37,7 +42,17 @@ def start_generation():
     if args.toc is not None:
         generate_toc()
 
-    global current_report_content
+    if args.presentation is not None:
+        placeholders = args.placeholders.split(",") if args.placeholders else []
+
+        for placeholder in placeholders:
+            p = placeholder.split(":")
+            args.presentation = args.presentation.replace(p[0], p[1])
+
+        args.presentation += f'\n\n{PAGE_BREAK}\n\n'
+
+        current_report_content = args.presentation + current_report_content
+
     try:
        with open(args.output, "w", encoding='utf-8') as file:
             file.write(preprocess_file(current_report_content))

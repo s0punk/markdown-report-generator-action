@@ -22,6 +22,15 @@ Index of the page where to generate a table of contents. If not specified, no ta
 Index starts at ```0```. \
 Example: 0
 
+### presentation-page
+Content to add as a presentation page at the very beginning of the report.
+Example: Lorem Ipsum...
+
+### presentation-placeholders
+Comma seperated list of values for the placeholders used in the [presentation-page](#presentation-page). \
+The syntax must be ```PLACEHOLDER:VALUE```. \
+Example: DATE:01/01/01,STUFF:abc
+
 ## Example
 See the [example folder](/example) for a folder structure example. \
 Also see the [example report](/example/docs/report.md) for an example of a generated report.

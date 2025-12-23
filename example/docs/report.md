@@ -1,3 +1,7 @@
+<p align="center">AUTO CEDULE</p><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><p align="center">DOCUMENT DE VISION</p><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><p align="center">VERSION 1.0.0</p><p align="center">09/10/2025</p>
+
+<div style="page-break-after: always;"></div>
+
 # Table of Contents
   - [Part 1](#part-1)
     - [More stuff](#more-stuff)

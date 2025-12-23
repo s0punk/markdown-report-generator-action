@@ -24,6 +24,7 @@ runs:
     - name: Install dependencies
       run: |
         pip install -r ${{ github.action_path }}/requirements.txt
+      shell: bash
 
     - name: Generate reports
       run: |
@@ -32,3 +33,4 @@ runs:
           --output ${{ inputs.output-path }} \
           --blacklist "${{ inputs.blacklist }}" \
           --toc "${{ inputs.table-of-content }}"
+      shell: bash

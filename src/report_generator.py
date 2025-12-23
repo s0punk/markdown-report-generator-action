@@ -15,7 +15,7 @@ parser.add_argument("--toc", type=int)
 
 args = parser.parse_args()
 
-report_resetted = False
+current_report_content = ""
 
 def start_generation():
     if not args.docs:
@@ -36,6 +36,13 @@ def start_generation():
 
     if args.toc is not None:
         generate_toc()
+
+    global current_report_content
+    try:
+       with open(args.output, "w", encoding='utf-8') as file:
+            file.write(preprocess_file(current_report_content))
+    except:
+        print("Could not save the report")
 
     print(f"Report completed at {args.output}.")
 
@@ -65,61 +72,45 @@ def append_file(path):
         print(f"Could not process file: {e}")
         return
     
-    fileMode = "a"
+    global current_report_content
 
-    global report_resetted
-    if not report_resetted:
-        report_resetted = True
-        fileMode = "w"
+    content = preprocess_file(content)
+    content += f'\n\n{PAGE_BREAK}\n\n'
 
-    try:
-        with open(args.output, fileMode, encoding='utf-8') as file:
-            file.write(preprocess_file(content))
-            file.write(f'\n\n{PAGE_BREAK}\n\n')
-        
-    except IOError as e:
-        print(f"Could not update the report: {e}")
+    current_report_content += content
 
 def generate_toc():
-    try:
-        with open(args.output, 'r', encoding='utf-8') as file:
-            content = file.read()
-        
-        lines = content.splitlines()
-        headers = []
+    global current_report_content
+    
+    lines = current_report_content.splitlines()
+    headers = []
 
-        for line in lines:
-            if re.match(r'^#+ ', line):
-                headers.append(line)
+    for line in lines:
+        if re.match(r'^#+ ', line):
+            headers.append(line)
 
-        toc = f"# Table of Contents\n"
+    toc = f"# Table of Contents\n"
 
-        for header in headers:
-            level = header.count("#")
-            label = re.sub(r'^#+ ', '', header)
+    for header in headers:
+        level = header.count("#")
+        label = re.sub(r'^#+ ', '', header)
 
-            toc += f"{'  ' * level}- [{label}](#{label.lower().replace(' ', '-')})\n"
-        toc += f"\n\n{PAGE_BREAK}\n\n"
+        toc += f"{'  ' * level}- [{label}](#{label.lower().replace(' ', '-')})\n"
+    toc += f"\n\n{PAGE_BREAK}\n\n"
 
-        pages = [m.start() for m in re.finditer(PAGE_BREAK, content)]
-        
-        if args.toc < 0 or len(pages) < args.toc or len(pages) == 0 or args.toc == 0:
-            toc_index = 0
-        else:
-            toc_index = pages[args.toc] - 1
+    pages = [m.start() for m in re.finditer(PAGE_BREAK, current_report_content)]
+    
+    if args.toc < 0 or len(pages) < args.toc or len(pages) == 0 or args.toc == 0:
+        toc_index = 0
+    else:
+        toc_index = pages[args.toc] - 1
 
-        if toc_index < 0:
-            toc_index = 0
-        elif toc_index > 0:
-            toc = f"\n\n{PAGE_BREAK}\n\n" + toc
+    if toc_index < 0:
+        toc_index = 0
+    elif toc_index > 0:
+        toc = f"\n\n{PAGE_BREAK}\n\n" + toc
 
-        content = content[:toc_index] + toc + content[toc_index:]
-
-        with open(args.output, 'w', encoding='utf-8') as file:
-            content = file.write(content)
-
-    except IOError as e:
-        print(f"Could read the report: {e}")
+    current_report_content = current_report_content[:toc_index] + toc + current_report_content[toc_index:]
 
 if __name__ == "__main__":
     start_generation()

@@ -44,14 +44,16 @@ class TableStrategy(CollectionInsertStrategy):
         for header in headers:
             new_content += f"| {header} "
             sep += f"| {"-" * len(header)} "
-        new_content += f"|\n{sep}|\n"
+        new_content += f"|\n{sep}|"
         
         for file in files:
+            new_content += "\n"
+
             for header in headers:
                 value = parse_value(file, f"## {header}")
                 new_content += f"| {format_lists(value)} "
 
-            new_content += "|\n"
+            new_content += "|"
 
         content = content[:insert_index] + new_content + content[insert_index:]
         return content
@@ -65,7 +67,7 @@ class RawStrategy(CollectionInsertStrategy):
         new_content = ""
 
         for file in files:
-            new_content += f"{file}\n\n"
+            new_content += f"{file}\n"
 
         content = content[:insert_index] + new_content + content[insert_index:]
         return content

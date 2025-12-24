@@ -90,7 +90,7 @@ def append_file(path):
     global current_report_content
 
     content = preprocess_file(content)
-    content += f'\n\n{PAGE_BREAK}\n'
+    content += f'\n\n{PAGE_BREAK}\n\n'
 
     current_report_content += content
 

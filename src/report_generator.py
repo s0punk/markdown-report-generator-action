@@ -39,9 +39,6 @@ def start_generation():
     print("Starting report generation")
     append_to_report(args.docs, None)
 
-    if args.toc is not None:
-        generate_toc()
-
     if args.presentation is not None:
         placeholders = args.placeholders.split(",") if args.placeholders else []
 
@@ -49,9 +46,12 @@ def start_generation():
             p = placeholder.split(":")
             args.presentation = args.presentation.replace(p[0], p[1])
 
-        args.presentation += f'\n\n{PAGE_BREAK}\n\n'
+        args.presentation += f'\n\n{PAGE_BREAK}\n'
 
         current_report_content = args.presentation + current_report_content
+
+    if args.toc is not None:
+        generate_toc()
 
     try:
        with open(args.output, "w", encoding='utf-8') as file:
@@ -90,7 +90,7 @@ def append_file(path):
     global current_report_content
 
     content = preprocess_file(content)
-    content += f'\n\n{PAGE_BREAK}\n\n'
+    content += f'\n\n{PAGE_BREAK}\n'
 
     current_report_content += content
 
@@ -111,19 +111,17 @@ def generate_toc():
         label = re.sub(r'^#+ ', '', header)
 
         toc += f"{'  ' * level}- [{label}](#{label.lower().replace(' ', '-')})\n"
-    toc += f"\n\n{PAGE_BREAK}\n\n"
+    toc += f"\n{PAGE_BREAK}"
 
     pages = [m.start() for m in re.finditer(PAGE_BREAK, current_report_content)]
     
     if args.toc < 0 or len(pages) < args.toc or len(pages) == 0 or args.toc == 0:
         toc_index = 0
     else:
-        toc_index = pages[args.toc] - 1
+        toc_index = pages[args.toc - 1] + len(PAGE_BREAK)
 
-    if toc_index < 0:
-        toc_index = 0
-    elif toc_index > 0:
-        toc = f"\n\n{PAGE_BREAK}\n\n" + toc
+    if toc_index > 0:
+        toc = "\n\n" + toc
 
     current_report_content = current_report_content[:toc_index] + toc + current_report_content[toc_index:]
 

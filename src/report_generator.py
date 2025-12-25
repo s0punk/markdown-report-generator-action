@@ -111,7 +111,7 @@ def generate_toc():
         label = re.sub(r'^#+ ', '', header)
 
         toc += f"{'  ' * level}- [{label}](#{label.lower().replace(' ', '-')})\n"
-    toc += f"\n{PAGE_BREAK}"
+    toc += f"\n{PAGE_BREAK}\n"
 
     pages = [m.start() for m in re.finditer(PAGE_BREAK, current_report_content)]
     

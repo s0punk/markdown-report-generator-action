@@ -51,7 +51,7 @@ class TableStrategy(CollectionInsertStrategy):
 
             for header in headers:
                 value = parse_value(file, f"## {header}")
-                new_content += f"| {format_lists(value)} "
+                new_content += f"| {format_lists(value).replace("\n", "<br/>")} "
 
             new_content += "|"
 

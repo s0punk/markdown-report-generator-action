@@ -111,7 +111,7 @@ def generate_toc():
         label = re.sub(r'^#+ ', '', header)
 
         anchor = label.lower().replace(' ', '-')
-        anchor = re.sub(r'[.,;:]', '', anchor)
+        anchor = re.sub(r'[.,;:\']', '', anchor)
         anchor = re.sub(r'[-]{2,}', '-', anchor)
 
         toc += f"{'  ' * (level - 1)}- [{label}](#{anchor})\n"
